@@ -1,0 +1,23 @@
+DigiKey: PIC16F630-I/P-ND
+
+PIC16F630, 676
+http://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en011655
+
+PIC16F630, 676 Revision A Errata
+http://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en505486
+
+Timer1 Errata
+http://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en531149
+
+Tips N Tricks Guide
+http://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en541028
+
+PIC12F629,675, PIC16F630,676 Programming
+http://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en012499
+
+
+DigiKey: CTX772-ND
+OSC XO 10.000MHZ HCMOS TTL PIN
+
+MXO45,45T,45HS,45HST
+http://www.ctscorp.com/components/Datasheets/008-0258-0.pdf

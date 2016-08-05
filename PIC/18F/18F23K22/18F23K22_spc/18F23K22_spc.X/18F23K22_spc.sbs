@@ -1,0 +1,58 @@
+## SCL Builder Setup File: Do not edit!!
+
+## VERSION: MPLAB X
+## FORMAT:  v2.00.01
+## DEVICE:  PIC18F24K22
+
+## PINREGACTIONS
+cyc
+No Repeat
+--
+&
+## ADVPINREGACTIONS
+--
+&
+--
+COND1
+Any
+
+
+
+0
+cyc
+
+--
+&
+## CLOCK
+&
+## STIMULUSFILE
+&
+## RESPONSEFILE
+&
+## ASYNCH
+Pin
+T3G
+Pulse High
+7424 cyc
+Sensor data for 128 counts
+-1
+--
+Pin
+T3G
+Pulse High
+3712 cyc
+Sensor data for 64 counts
+-1
+--
+Pin
+T3G
+Pulse High
+58 cyc
+Sensor data for 1 count
+-1
+--
+&
+## ADVANCEDSCL
+
+1
+&

@@ -1,0 +1,51 @@
+## SCL Builder Setup File: Do not edit!!
+
+## VERSION: MPLAB X
+## FORMAT:  v2.00.01
+## DEVICE:  PIC24FJ128GC010
+
+## PINREGACTIONS
+cyc
+No Repeat
+--
+&
+## ADVPINREGACTIONS
+--
+&
+--
+COND2
+Any
+
+
+
+0
+cyc
+
+--
+&
+## CLOCK
+&
+## STIMULUSFILE
+&
+## RESPONSEFILE
+&
+## ASYNCH
+Pin
+INT0
+Set Low
+
+
+-1
+--
+Pin
+INT0
+Set High
+
+
+-1
+--
+&
+## ADVANCEDSCL
+
+1
+&

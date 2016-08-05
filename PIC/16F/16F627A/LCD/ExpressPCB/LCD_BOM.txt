@@ -1,0 +1,19 @@
+REF	VALUE                   	DIGIKEY P/N
+======= =============================== ===============================
+C1	0.47uF                  	445-1353-1-ND
+C2	0.1                     	445-1316-1-ND
+C3	22uF                    	1276-1855-1-ND
+C4	0.1                     	445-1316-1-ND
+C5	0.1                     	445-1316-1-ND
+C6	0.1                     	445-1316-1-ND
+D1	SBR05U20SN-7            	SBR05U20SNDICT-ND
+J1	5.5x2.5mm               	SC237-ND
+LCD1	NHD-C0216AZ-FN-GBW      	NHD-C0216AZ-FN-GBW-ND
+R1	4.7K                    	311-4.7KGRCT-ND
+R2	470                     	P470ACT-ND
+R3	10K                     	311-10KGRCT-ND
+R4	470                     	P470ACT-ND
+SW1	B3S-1002 BY OMZ          	SW416-ND
+SW2	B3S-1002 BY OMZ          	SW416-ND
+U1	LM2940SX-5.0/NOPB		LM2940SX-5.0/NOPBTR-ND
+U2	PIC16F627A              	PIC16F627A-I/P-ND
