@@ -19,7 +19,7 @@
  *  
  *  I have only tried this code in the simulator so I do not know that
  *  it works in the real hardware. When I do get some PICPIC24FJ128GCxxx
- *  parts I will valiate it. Until then giv it a try and let me know
+ *  parts I will valiate it. Until then give it a try and let me know
  *  what works and what fails.
  */  
     
