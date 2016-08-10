@@ -44,11 +44,11 @@
  *   ICD_PGD <> :  3 RA1/PGD2    AN9 /RB15 18 : <> RED LED, HIGH=ON
  *           <> :  4 RB0/TXD2    INT1/RB14 17 : <>
  *           <> :  5 RB1/RXD2    AN11/RB13 16 : <>
- *           <> :  6 RA4/SOSCO   AN12/RB12 15 : <>
+ *           <> :  6 RB2/RXD1    AN12/RB12 15 : <>
  *           <> :  7 RA2/OSCI    INT2/RA6  14 : <>
  *           <> :  8 RA3/OSCO         RB9  13 : <>
  *           <> :  9 RB4/SOSCI        RB8  12 : <>
- *           <> : 10 RB2/RXD1    TXD1/RB7  11 : <>
+ *           <> : 10 RA4/SOSCO   TXD1/RB7  11 : <>
  *              +-----------------------------+
  *                          DIP-20
  *
