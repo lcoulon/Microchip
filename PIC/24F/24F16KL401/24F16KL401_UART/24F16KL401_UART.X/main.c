@@ -18,12 +18,12 @@
  *   ICD_VPP -> :  1 RA5/MCLR         VDD  20 : <- PWR
  *   ICD_PGC <> :  2 RA0/PGC2         VSS  19 : <- GND
  *   ICD_PGD <> :  3 RA1/PGD2    AN9 /RB15 18 : <> RED LED, HIGH=ON
- *   DBG_TXD <> :  4 RB0/TXD2   C1OUT/RB14 17 : <> C1OUT
+ *   DBG_TXD <> :  4 RB0/TXD2   C1OUT/RB14 17 : <> 
  *   DBG_RXD <> :  5 RB1/RXD2    AN11/RB13 16 : <>
  *           <> :  6 RA4         AN12/RB12 15 : <>
- *   DETECT  <> :  7 RA2/C1INB   CCP1/RA6  14 : <> AIMERPWM
- *   VREG_ON <> :  8 RA3              RB9  13 : <>
- *   MORSE   <> :  9 RB4              RB8  12 : <>
+ *           <> :  7 RA2/C1INB   CCP1/RA6  14 : <> 
+ *           <> :  8 RA3              RB9  13 : <>
+ *           <> :  9 RB4              RB8  12 : <>
  *           <> : 10 RB2/RXD1    TXD1/RB7  11 : <>
  *              +-----------------------------+
  *                          DIP-20
