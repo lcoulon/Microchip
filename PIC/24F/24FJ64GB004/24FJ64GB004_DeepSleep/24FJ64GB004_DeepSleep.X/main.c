@@ -182,7 +182,7 @@ void __attribute__((interrupt,no_auto_psv)) _INT0Interrupt(void)
  */  
 unsigned short PIC_init(void)
 {   
-    unsigned short Result;
+    register unsigned short Result;
     
     /* 
      * Disable all interrupt sources
@@ -196,8 +196,8 @@ unsigned short PIC_init(void)
     IEC5 = 0;
     __builtin_disi(0x0000); /* enable interrupts */
     
-    CLKDIV = 0x0100;    /* set for 4MHz FRC oscillator */
-    
+    _NSTDIS = 1;    /* disable interrupt nesting */
+
     AD1PCFG = 0xffff; /* Set for digital I/O */
     
     CM1CON  = 0x0000;
@@ -325,19 +325,12 @@ unsigned short PIC_init(void)
     /* Request switch primary to new selection */
     __builtin_write_OSCCONL(OSCCON  | (1 << _OSCCON_OSWEN_POSITION));
 
-    /* wait for clock switch to complete */
-    while(OSCCONbits.OSWEN); /* Warning: the simulator usually locks up here */
+    /* wait, with timeout, for clock switch to complete */
+    for(Result=10000; --Result && OSCCONbits.OSWEN;);
     
+    /* wait, with timeout, for the PLL to lock */
+    for(Result=10000; --Result && !OSCCONbits.LOCK && CLKDIVbits.PLLEN;);
     
-    /* check to see if we can enable the PLL */
-    if(CLKDIVbits.PLLEN)
-    {
-        /* wait for the PLL to lock */
-        while(OSCCONbits.LOCK == 0);
-    }
-    
-    _NSTDIS = 1;    /* disable interrupt nesting */
-
     if(RCONbits.WDTO)
     {
         Result = 3;

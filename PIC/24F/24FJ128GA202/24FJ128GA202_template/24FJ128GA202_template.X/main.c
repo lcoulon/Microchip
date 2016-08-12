@@ -24,7 +24,7 @@
  *          < > :  9 RA2/OSCI           VCAP 20 : <-- 10UF cap
  *          < > : 10 RA3/OSCO           VBAT 19 : <-- PWR
  *          -*> : 11 RB4/SOSCI/RPI4  RP9/RB9 18 : < > 
- *          -*> : 12 RA4/SOSCI       RP8/RB8 17 : <*> 
+ *          -*> : 12 RA4/SOSCO/SCLKI RP8/RB8 17 : <*> 
  *          --> : 13 VDD             RP7/RB7 16 : <*> 
  *          <*> : 14 RB5/PGD3   PGC3/RP6/RB6 15 : <*> 
  *              +-------------------------------+
@@ -83,7 +83,7 @@ int main(void)
     
     for(;;)
     {
-        /* embedded application never return from main*/
+        /* an embedded application never return from main*/
     }
     return 0;
 }

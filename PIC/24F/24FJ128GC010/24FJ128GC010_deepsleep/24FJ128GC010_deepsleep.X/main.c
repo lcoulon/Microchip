@@ -232,7 +232,7 @@ void __attribute__((interrupt,no_auto_psv)) _INT0Interrupt(void)
  */  
 unsigned short PIC_init(void)
 {   
-    unsigned short Result;
+    register unsigned short Result;
     
     /* Ensure interrupts are off */
     __asm__ volatile("disi #0x3FFF");
@@ -245,6 +245,9 @@ unsigned short PIC_init(void)
     IEC5 = 0;
     /* Turn on interrupts */
     __asm__ volatile("disi #0x0000");
+
+    /* disable interrupt nesting */
+    _NSTDIS = 1;
 
     /* Unlock Registers */
     __builtin_write_OSCCONL(OSCCON & _OSCCON_IOLOCK_MASK);
@@ -324,8 +327,8 @@ unsigned short PIC_init(void)
     /*
      * Any GPIO pins should be configured here 
      * because a wake from deep sleep has reset 
-     * them to the Power On Reset state, that 
-     * is input and analog for pins used for 
+     * them to the Power On Reset state. That 
+     * is: input and analog for pins used for 
      * the Analog to Digital Converter.
      */
     /* setup INT0 */
@@ -353,27 +356,22 @@ unsigned short PIC_init(void)
      * In this case we will be using the FRCPLL
      */
     CLKDIV = 0x0100;    /* select DOZE 1:1, DOZE disabled, RCDIV 0b001 (4MHz), PLL disabled */
+
+    /* Enable the PLL */
+    CLKDIVbits.PLLEN = 1;
+
     /* Select primary oscillator as FRCPLL */
     __builtin_write_OSCCONH(0b001);
     
     /* Request switch primary to new selection */
     __builtin_write_OSCCONL(OSCCON  | (1 << _OSCCON_OSWEN_POSITION));
 
-    /* wait for clock switch to complete */
-    while(OSCCONbits.OSWEN); /* Warning: the simulator usually locks up here */
+    /* wait, with timeout, for clock switch to complete */
+    for(Result=10000; --Result && OSCCONbits.OSWEN;);
     
-    /* start the PLL */
-    CLKDIVbits.PLLEN = 1;
+    /* wait, with timeout, for the PLL to lock */
+    for(Result=10000; --Result && !OSCCONbits.LOCK && CLKDIVbits.PLLEN;);
     
-    /* check to see if we can enable the PLL */
-    if(CLKDIVbits.PLLEN)
-    {
-        /* wait for the PLL to lock */
-        while(OSCCONbits.LOCK == 0);
-    }
-    
-    _NSTDIS = 1;    /* disable interrupt nesting */
-
     if(RCONbits.WDTO)
     {
         Result = 3;
