@@ -188,8 +188,6 @@ unsigned char PIC_Init(void)
     OSCTUNEbits.PLLEN = 1; /* Use PLL */
 #endif
     
-    REFOCON = 0xB0; /* Output the primary oscillator frequency on REFO(RB2) */
-    
     ANCON0        = 0b11111111; /* turn off all ADC inputs */
     ANCON1        = 0b00011111;
     
