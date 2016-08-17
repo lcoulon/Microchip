@@ -1,0 +1,8 @@
+The iButton socket DS9100 must be ordered from DigiKey in several parts:
+
+
+DS9100-A+-ND   CONTACT TOUCH AND HOLD (Outer ring)
+DS9100-B+-ND   CONTACT TOUCH AND HOLD (Center contact, type 1)
+DS9100-C+-ND   CONTACT TOUCH AND HOLD (Center contact, type 2)
+
+What is needed is one Outer ring and one Center contact.
