@@ -145,7 +145,7 @@ MAIN_CODE code
 main:
 ;
 ; Setup TIMER0
-;   TIMER0 clock source is FOSC/4 and the 1:4 prescale
+;   TIMER0 clock source is FOSC/4 and the 1:2 prescale
 ;   this gives 8*256 (or 2048) oscillator clocks until 
 ;   the 8-bit timer asserts an overflow. Using a 4MHz
 ;   system oscillator this is 0.512 seconds.
