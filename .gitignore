@@ -52,6 +52,7 @@ Temporary Items
 *.map
 *.hxl
 *.lst
+*.err
 *.rlf
 *.pre
 *.obj
@@ -70,6 +71,7 @@ Temporary Items
 *.pre
 *.p1
 *.lst
+*.err
 *.sym
 *.obj
 *.o
