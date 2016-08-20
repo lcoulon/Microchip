@@ -11,6 +11,7 @@
 #include "main.inc"
 #include "lcd.inc"
 #include "buttons.inc"
+#include "leds.inc"
 ;
 ;                         PIC16F877A
 ;                 +----------:_:----------+
@@ -30,7 +31,7 @@
 ;           <- 14 : OSC2              RD4 : 27 -> LCD_RS
 ;           <> 15 : RC0/SOSCO   RX/DT/RC7 : 26 <- RXD
 ;           <> 16 : RC1/SOSCI   TX/CK/RC6 : 25 -> TXD
-;    BUZZER <> 17 : RC2               RC5 : 24 <>
+;    BUZZER <> 17 : RC2/CCP1          RC5 : 24 <>
 ;       SCL <> 18 : RC3/SCL       SDA/RC4 : 23 <> SDA
 ;    LCD_D4 <> 19 : RD0               RD3 : 22 <> LCD_D7
 ;    LCD_D5 <> 20 : RD1               RD2 : 21 <> LCD_D6
@@ -67,6 +68,7 @@ main:
     movlw   (FOUR_BIT&LINES_5X7)
     lcall   OpenXLCD
     lcall   ButtonInit
+    lcall   LedInit
 
     lgoto   lcdTest
 
@@ -108,17 +110,40 @@ lcdTestRestart:
 ;
 ; Wait for key event.
 ;
+TestLoop:
+    lcall   ButtonGetStatus
+    pagesel TestLoop
+    skpnz
+    goto    TestContinue
+    xorlw   BUTTON_S2_CHANGE_MASK | BUTTON_S2_STATE_MASK
+    skpnz
+    goto    ledTestNextState
+    xorlw   BUTTON_S2_CHANGE_MASK | BUTTON_S2_STATE_MASK
+    xorlw   BUTTON_S3_CHANGE_MASK | BUTTON_S3_STATE_MASK
+    skpnz
+    goto    lcdTestNextState
+;
+; Wait for millisecond tick
+;
+TestContinue:
+    btfss   INTCON,T0IF
+    goto    TestLoop
+    bcf     INTCON,T0IF
+    lcall   ButtonPoll
+    lgoto   TestLoop
+;
+; Show binary count in the LEDs of the PICDEM2 Plus
+;
+ledTestNextState:
+	lcall	LedGet
+	addlw	1
+	lcall	LedSet
+	pagesel TestContinue
+    goto    TestContinue
+;
 ; Display 16 character on LCD line 2.
 ;
-lcdTestLoop:
-    lcall   ButtonGetStatus
-    pagesel lcdTestLoop
-    skpnz
-    goto    lcdTestContinue
-    xorlw   BUTTON_S2_CHANGE_MASK | BUTTON_S2_STATE_MASK
-    skpz
-    goto    lcdTestContinue
-
+lcdTestNextState:
     movlw   LINE_ONE
     lcall   SetDDRamAddr
 
@@ -140,7 +165,7 @@ lcdTestWriteLoop:
     banksel lcdTestCount
     movf    lcdTestCount,W
     lcall   WriteDataXLCD
-    pagesel lcdTestLoop
+    pagesel TestLoop
 
     banksel lcdTestCount
     incf    lcdTestCount,F
@@ -148,12 +173,7 @@ lcdTestWriteLoop:
     andlw   0x0F
     skpz
     goto    lcdTestWriteLoop
-lcdTestContinue:
-    btfss   INTCON,T0IF
-    goto    lcdTestLoop
-    bcf     INTCON,T0IF
-    lcall   ButtonPoll
-    lgoto   lcdTestLoop
+    goto    TestContinue
 
 ;
 ; LCD messages
@@ -162,7 +182,7 @@ MAIN_CONST   code
 LCD_message_BlankLine:
     dt  "                ",0
 LCD_message4:
-    dt  "LCD test Ver 1.0",0
+    dt  "LCD test Ver 1.1",0
 LCD_message5:
     dt  "Character row   ",0
     END
