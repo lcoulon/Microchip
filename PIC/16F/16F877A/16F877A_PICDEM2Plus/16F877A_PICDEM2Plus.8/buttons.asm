@@ -8,10 +8,10 @@
 
 BUTTON_DATA udata
 ButtonStatus        res 1
-ButtonSample		res 1
-ButtonStable		res 1
-ButtonChange		res 1
-ButtonStableCount	res 1
+ButtonSample        res 1
+ButtonStable        res 1
+ButtonChange        res 1
+ButtonStableCount   res 1
 
 BUTTON_CODE code
 ;
@@ -69,9 +69,9 @@ ButtonInit:
     bsf     ButtonS3    ; Make GPIO for switch S3 an input
     banksel ButtonStatus
     clrf    ButtonStatus     
-    clrf    ButtonSample	
-    clrf    ButtonStable	
-    clrf    ButtonChange	
+    clrf    ButtonSample    
+    clrf    ButtonStable    
+    clrf    ButtonChange    
     clrf    ButtonStableCount
     return
 

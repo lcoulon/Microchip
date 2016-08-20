@@ -53,7 +53,7 @@
 ;
 ;
 MAIN_DATA udata
-lcdTestCount    	res 1
+lcdTestCount        res 1
 
 
 MAIN_CODE code
@@ -135,10 +135,10 @@ TestContinue:
 ; Show binary count in the LEDs of the PICDEM2 Plus
 ;
 ledTestNextState:
-	lcall	LedGet
-	addlw	1
-	lcall	LedSet
-	pagesel TestContinue
+    lcall   LedGet
+    addlw   1
+    lcall   LedSet
+    pagesel TestContinue
     goto    TestContinue
 ;
 ; Display 16 character on LCD line 2.

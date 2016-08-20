@@ -419,7 +419,16 @@ CGRAM_Table:
     dt      B'10000000'
     dt      B'10011111'
 
-    dt      B'10011110' ; CGRAM character 4
+    dt      B'10000000' ; CGRAM character 4
+    dt      B'10001110'
+    dt      B'10001010'
+    dt      B'10001010'
+    dt      B'10001110'
+    dt      B'10000000'
+    dt      B'10000000'
+    dt      B'10011111'
+
+    dt      B'10011110' ; CGRAM character 5
     dt      B'10010001'
     dt      B'10010001'
     dt      B'10011110'
@@ -428,7 +437,7 @@ CGRAM_Table:
     dt      B'10000000'
     dt      B'10011111'
 
-    dt      B'10001110' ; CGRAM character 5
+    dt      B'10001110' ; CGRAM character 6
     dt      B'10010001'
     dt      B'10010001'
     dt      B'10011111'
@@ -437,7 +446,7 @@ CGRAM_Table:
     dt      B'10000000'
     dt      B'10011111'
 
-    dt      B'10010001' ; CGRAM character 6
+    dt      B'10010001' ; CGRAM character 7
     dt      B'10011011'
     dt      B'10010101'
     dt      B'10010101'
@@ -446,21 +455,12 @@ CGRAM_Table:
     dt      B'10000000'
     dt      B'10011111'
 
-    dt      B'10000000' ; CGRAM character 7
+    dt      B'10000000' ; CGRAM character 8
     dt      B'10001110'
     dt      B'10001010'
     dt      B'10001010'
     dt      B'10001110'
     dt      B'10000000'
-    dt      B'10000000'
-    dt      B'10011111'
-
-    dt      B'10011111' ; CGRAM character 8
-    dt      B'10010001'
-    dt      B'10010001'
-    dt      B'10010001'
-    dt      B'10010001'
-    dt      B'10011111'
     dt      B'10000000'
     dt      B'10011111'
 

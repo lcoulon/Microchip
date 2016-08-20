@@ -61,8 +61,8 @@ start:
     
     movlw   b'11000001'         ; Pull-ups off, INT edge low to high, WDT prescale 1:1 
     movwf   OPTION_REG          ; TMR0 clock edge low to high, TMR0 clock = FCY, TMR0 prescale 1:4
-								; TIMER0 will assert the overflow flag every 256*4 (1024)
-								; instruction cycles, with a 4MHz oscilator this ia 1.024 milliseconds.
+                                ; TIMER0 will assert the overflow flag every 256*4 (1024)
+                                ; instruction cycles, with a 4MHz oscilator this ia 1.024 milliseconds.
             
     movlw   b'11111111'         ; 
     movwf   TRISA           

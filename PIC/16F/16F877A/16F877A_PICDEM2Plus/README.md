@@ -11,4 +11,4 @@ The 4-bit interface on some Hitachi 44780 type LCD character module has not been
 
 The LCD functions in this code probe the LCD module to detect this type of module and do a proper job of polling the LCD modules busy status.
 
-The S2 and S3 buttons are sampled and debounced. I have reworked my PICDEM2 Plus to move button S3 from RB0 to RA5. This allows all four LEDs to be used with outputs RB3,RB2,RB1 and RB0. Adding code to interface with these LEDs and the RS232 serial, I2C EEPROM, ADC input and buzzer interfaces is left to others.
+The S2 and S3 buttons are sampled and debounced. I have reworked my PICDEM2 Plus to move button S3 from RB0 to RA5. This allows all four LEDs to be used with outputs RB3,RB2,RB1 and RB0. Updated code to drive these LEDs. Adding code to interface with the RS232 serial, I2C EEPROM, ADC input and buzzer interfaces is left to others.

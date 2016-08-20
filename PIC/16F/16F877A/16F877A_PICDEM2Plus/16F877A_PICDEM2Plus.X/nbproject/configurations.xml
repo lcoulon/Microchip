@@ -8,6 +8,7 @@
       <itemPath>buttons.inc</itemPath>
       <itemPath>lcd.inc</itemPath>
       <itemPath>main.inc</itemPath>
+      <itemPath>leds.inc</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -21,6 +22,7 @@
       <itemPath>lcd.asm</itemPath>
       <itemPath>main.asm</itemPath>
       <itemPath>buttons.asm</itemPath>
+      <itemPath>leds.asm</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
