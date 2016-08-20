@@ -82,9 +82,9 @@ void delay( unsigned long wait_ms )
  * main application
  */
 int main( void )
-	{
+    {
     register unsigned int uiTimeout;
-	/*
+    /*
      * Disable all interrupt sources
      */
     __builtin_disi(0x3FFF); /* disable interrupts for 16383 cycles */

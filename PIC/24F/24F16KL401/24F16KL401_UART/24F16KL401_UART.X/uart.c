@@ -100,26 +100,26 @@ U1_Init(
     _U1TXIP = 0b100;
     _U1ERIP = 0b100;
     /* Turn off UART */
-	U1MODE = 0;
-	U1STA = 0;
+    U1MODE = 0;
+    U1STA = 0;
     /* Setup default GPIO states for UART pins */
 #ifdef U1_TXD
     U1_TXD = 1;
 #endif
 
 #ifdef U1_TXD_DIR
-	U1_TXD_DIR = 0;
+    U1_TXD_DIR = 0;
 #endif
 
 #ifdef U1_RXD_DIR
-	U1_RXD_DIR = 1;
+    U1_RXD_DIR = 1;
 #endif
     /* Initialize the UART */
-	U1BRG = U1_BRGREG;
+    U1BRG = U1_BRGREG;
     _U1_BRGH = U1_BRGH_VALUE;
-	_U1_UARTEN = 1;
-	_U1_UTXEN  = 1;
- 	_U1RXIF = 0;        /* reset RX flag */
+    _U1_UARTEN = 1;
+    _U1_UTXEN  = 1;
+    _U1RXIF = 0;        /* reset RX flag */
 }
 
 /*
@@ -319,26 +319,26 @@ U2_Init(
     _U2TXIP = 0b100;
     _U2ERIP = 0b100;
     /* Turn off UART */
-	U2MODE = 0;
-	U2STA = 0;
+    U2MODE = 0;
+    U2STA = 0;
     /* Setup default GPIO states for UART pins */
 #ifdef U2_TXD
     U2_TXD = 1;
 #endif
 
 #ifdef U2_TXD_DIR
-	U2_TXD_DIR = 0;
+    U2_TXD_DIR = 0;
 #endif
 
 #ifdef U2_RXD_DIR
-	U2_RXD_DIR = 1;
+    U2_RXD_DIR = 1;
 #endif
     /* Initialize the UART */
-	U2BRG = U2_BRGREG;
+    U2BRG = U2_BRGREG;
     _U2_BRGH = U2_BRGH_VALUE;
-	_U2_UARTEN = 1;
-	_U2_UTXEN  = 1;
- 	_U2RXIF = 0;        /* reset RX flag */
+    _U2_UARTEN = 1;
+    _U2_UTXEN  = 1;
+    _U2RXIF = 0;        /* reset RX flag */
 }
 
 /*

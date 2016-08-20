@@ -44,9 +44,9 @@
 #pragma config CP = OFF                 // Code Protect (Protection Disabled)
 
 /* System Macros */
-#define	GetSystemClock()        (8000000ul)
-#define	GetPeripheralClock()    (GetSystemClock()/(1 << OSCCONbits.PBDIV))
-#define	GetInstructionClock()   (GetSystemClock())
+#define GetSystemClock()        (8000000ul)
+#define GetPeripheralClock()    (GetSystemClock()/(1 << OSCCONbits.PBDIV))
+#define GetInstructionClock()   (GetSystemClock())
 
 /* application macros */
 #define UART UART1
