@@ -18,7 +18,7 @@
  *               < > :  5 RA3/AN3         RP6/RB3 24 : < > 
  *          10uF --> :  6 VCAP      REFO/ RP5/RB2 23 : < > 
  *               < > :  7 RA5/RP2         RP4/RB1 22 : < > 
- *           GND --> :  8 VSS             RP3/RB0 21 : < > 
+ *           GND --> :  8 VSS       INT0/ RP3/RB0 21 : < > SW to GNDcdew
  *               < > :  9 RA7/OSC1            VDD 20 : <-- PWR
  *               < > : 10 RA6/OSC2            VSS 19 : <-- GND
  *               < > : 11 RC0/RP11  RXD1/RP18/RC7 18 : <*> 
@@ -56,7 +56,7 @@
 #pragma config XINST = OFF, CP0 = OFF, OSC = INTOSC, SOSCSEL = DIG
 #pragma config CLKOEC = OFF, FCMEN = OFF, IESO = ON, WDTPS = 1024
 #pragma config DSWDTOSC = INTOSCREF, RTCOSC = INTOSCREF, DSBOREN = OFF
-#pragma config DSWDTEN = ON, DSWDTPS = K131, IOL1WAY = OFF, ADCSEL = BIT12
+#pragma config DSWDTEN = ON, DSWDTPS = 2048, IOL1WAY = OFF, ADCSEL = BIT12
 #pragma config PLLSEL = PLL96, MSSP7B_EN = MSK7, WPFP = PAGE_127
 #pragma config WPCFG = OFF, WPDIS = OFF, WPEND = PAGE_WPFP
     
@@ -64,7 +64,11 @@
 #define FOSC (8000000L * PLLX)
 #define FCYC (FOSC/4L)
 #define _XTAL_FREQ FOSC
-    
+/*
+ * Enumerate reasons we wake up
+ */
+typedef enum { ePOR, eWDTO, eDSPOR, eDSWDTO, eDSWINT0 } eWakeReason;
+
 #ifdef COMPILER_C18
 #pragma udata access ISR_Data
     
@@ -117,7 +121,7 @@ void interrupt HTC_ISR_Handler(void) {
 */  
 unsigned char PIC_Init(void)
 {   
-    register unsigned char Result;
+    register eWakeReason Result;
 
     enum
     {   
@@ -195,7 +199,22 @@ unsigned char PIC_Init(void)
     CM2CON        = 0b00000000;
     CM3CON        = 0b00000000;
     CVRCON        = 0b00000000;
+
+    LATA          = 0;
+    LATB          = PORTB;      /* RB0 & RB1 used to debug deep sleep code */
+    LATC          = 0;
     
+    TRISA         = 0b11111111;
+    TRISB         = 0b11110001; /* RB1, RB2 & RB3 used to debug deep sleep code */
+    TRISC         = 0b11111111;
+    INTCON2      |= 0b10000000; /* disable PORTB pull-ups           */
+
+    /*
+     * Release deep sleep freeze of GPIO pins
+     */
+    DSCONLbits.RELEASE = 0;
+    LATBbits.LATB1 = 1;     /* Assert RB1 to show we started the init */
+
 /* UnLock Registers */
     PPSCONbits.IOLOCK = 0;  /* Trick compiler to load PPSCON bank early */
     EECON2 = 0x55;
@@ -250,20 +269,7 @@ unsigned char PIC_Init(void)
     EECON2 = 0xAA;
     PPSCONbits.IOLOCK = 1;  /* This should be a sinlge instruction, check generated code */
 /* Lock Registers ends */
-    
-    LATA          = 0;
-    LATB          = PORTB;      /* RB0 & RB1 used to debug deep sleep code */
-    LATC          = 0;
-    
-    TRISA         = 0b11111111;
-    TRISB         = 0b11111100; /* RB0 & RB1 used to debug deep sleep code */
-    TRISC         = 0b11111111;
-    INTCON2      |= 0b10000000; /* disable PORTB pull-ups           */
 
-    /*
-     * Release deep sleep freeze of GPIO pins
-     */
-    DSCONLbits.RELEASE = 0;
     /*
      * Decide if we can start up the high speed system oscillator
      * 
@@ -281,20 +287,16 @@ unsigned char PIC_Init(void)
     {
         if(DSWAKEHbits.DSINT0)
         {
-            Result = 1;          /* INT0 wake from deep sleep */
-            DSGPR1 = DSGPR1 + 1; /* count when wake from INT0  */
+            Result = eDSWINT0;      /* INT0 wake from deep sleep */
         }
         else if(DSWAKELbits.DSWDT)
         {
-            Result = 1;          /* Timeout wake from deep sleep */
-            DSGPR0 = DSGPR0 + 1; /* count when wake from DSWDT */
+            Result = eDSWDTO;       /* Timeout wake from deep sleep */
         }
         else if(DSWAKELbits.DSPOR)
         {
-            Result = 2;          /* MCLR wake from deep sleep */
+            Result = eDSPOR;        /* MCLR wake from deep sleep */
             RCON |= 0b00111111;
-            DSGPR0 = 0;
-            DSGPR1 = 0;
             LATB   = 0;
         }
     }
@@ -302,19 +304,18 @@ unsigned char PIC_Init(void)
     {
         if(RCONbits.NOT_PD == 0) /* Power on reset */
         {
-            Result = 0;         /* assume we are a Power On reset */
+            Result = ePOR;          /* Power On reset */
             RCON |= 0b00111111;
-            DSGPR0 = 0;
-            DSGPR1 = 0;
             LATB   = 0;
         }
-        else if(RCONbits.NOT_TO) /* Watch Dog Timeout reset */
+        else if(RCONbits.NOT_TO)
         {
-            Result = 3;
+            Result = eWDTO;         /* Watch Dog Timeout reset */
             RCONbits.NOT_TO = 1;
         }
     }
 
+    LATBbits.LATB1 = 0;     /* Deassert RB1 to show we completed the init */
     return Result;
 }   
 /*  
@@ -322,23 +323,26 @@ unsigned char PIC_Init(void)
 */  
 void main(void)
 {   
-    unsigned char ResetType;
+    eWakeReason ResetType;
     
     /* Initialize this PIC */    
     ResetType = PIC_Init();
     
     switch (ResetType)
     {
-        case 0: /* Power on reset, hello there */
+        case ePOR:              /* Power on reset, hello there */
             break;
-        case 1: /* DSWDT timeout wake from deep sleep */
-            LATB ^= 1; /* toggle RB0 on each wake from deep sleep */
+        case eDSWDTO:           /* DSWDT timeout wake from deep sleep */
+            LATBbits.LATB2 ^= 1; /* toggle RB2 on each timeout wake from deep sleep */
             break;
-        case 2: /* MCLR wake from deep sleep */
+        case eDSWINT0:          /* DSINT0 wake from deep sleep */  
+            LATBbits.LATB3 ^= 1; /* toggle RB3 on each INT0 wake from deep sleep */
             break;
-        case 3: /* WDT reset, never in deep sleep */
+        case eDSPOR:            /* MCLR wake from deep sleep */
             break;
-        default: /*  */
+        case eWDTO:             /* WDT reset, never in deep sleep */
+            break;
+        default:                /*  */
             break;
     };
     
@@ -346,24 +350,29 @@ void main(void)
      * Warning: Simulator does not simulate deep sleep very well
      */
     /* enter deep sleep code */
+    INTCONbits.GIE = 0;     /* Disable the interrupt system */
+    INTCONbits.PEIE = 0;    /* Disable peripherial interrupts */
+    TRISBbits.TRISB0 = 1;   /* Make RB0/INT0 an input */
+    ANCON1bits.PCFG8 = 1;   /* Make RB0/INT0 a digital input */
+    INTCON2bits.INTEDG0 = 0; /* Select HIGH to LOW edge for interrupt */
+    INTCONbits.INT0IF = 0;  /* Clear the INT0 reauest flag */
+    INTCONbits.INT0IE = 1;  /* Emable an INT0 assert to wake from sleep */
     OSCCONbits.IDLEN = 0;
+    WDTCONbits.SWDTEN = 1;  /* Enable the regular Watch Dog Time out too */
     WDTCONbits.REGSLP = 1;
     DSCONHbits.DSEN = 1;
     Nop();
     Sleep();
+    
     /*
      * If we get to deep sleep the only way out
      * is through the reset vector.
      * 
-     * When we do not get to deep sleep we print a
-     * message then hang.
+     * When we do not get to deep sleep we toggle RB1 fast and hang
+     * until the regular sleep mode WDT causes a reset.
      */
-    LATBbits.LATB1 = 1; /* assert deep sleep entry failed */
-
     for(;;)
     {
-        Nop();
-        Nop();
-        Nop();
+        LATBbits.LATB1 ^= 1; /* Toggle RB1 and hang to show we failed to enter deep sleep */
     }
 }   
