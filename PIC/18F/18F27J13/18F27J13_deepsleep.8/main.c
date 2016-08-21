@@ -18,7 +18,7 @@
  *               < > :  5 RA3/AN3         RP6/RB3 24 : < > 
  *          10uF --> :  6 VCAP      REFO/ RP5/RB2 23 : < > 
  *               < > :  7 RA5/RP2         RP4/RB1 22 : < > 
- *           GND --> :  8 VSS       INT0/ RP3/RB0 21 : < > SW to GNDcdew
+ *           GND --> :  8 VSS       INT0/ RP3/RB0 21 : < > SW to GND
  *               < > :  9 RA7/OSC1            VDD 20 : <-- PWR
  *               < > : 10 RA6/OSC2            VSS 19 : <-- GND
  *               < > : 11 RC0/RP11  RXD1/RP18/RC7 18 : <*> 
