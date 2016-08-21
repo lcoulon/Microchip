@@ -201,8 +201,12 @@ unsigned char PIC_Init(void)
     CVRCON        = 0b00000000;
 
     LATA          = 0;
-    LATB          = PORTB;      /* RB0 & RB1 used to debug deep sleep code */
     LATC          = 0;
+    /*
+     * PORTB used to debug deep sleep code so set the output latch 
+     * from the 'frozen' state before we release the hold.
+     */
+    LATB          = PORTB;      /*  */
     
     TRISA         = 0b11111111;
     TRISB         = 0b11110001; /* RB1, RB2 & RB3 used to debug deep sleep code */
