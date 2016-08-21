@@ -176,8 +176,8 @@ unsigned char PIC_Init(void)
         eRPO_P3D    = 25
     };  
     
-    INTCON = 0; /* Disable all interrupt sources */
-    INTCON3 = 0;
+    INTCON  &= ~0xF8;           /* Disable all interrupt sources */
+    INTCON3 &= ~0x38;
     PIE1 = 0;
     PIE2 = 0;
     PIE3 = 0;
@@ -350,16 +350,22 @@ void main(void)
      * Warning: Simulator does not simulate deep sleep very well
      */
     /* enter deep sleep code */
-    INTCONbits.GIE = 0;     /* Disable the interrupt system */
-    INTCONbits.PEIE = 0;    /* Disable peripherial interrupts */
+    INTCON  &= ~0xF8;             /* Disable all interrupt sources */
+    INTCON3 &= ~0x38;
+    PIE1 = 0;
+    PIE2 = 0;
+    PIE3 = 0;
+    PIE4 = 0;
+    PIE5 = 0;
+
     TRISBbits.TRISB0 = 1;   /* Make RB0/INT0 an input */
     ANCON1bits.PCFG8 = 1;   /* Make RB0/INT0 a digital input */
-    INTCON2bits.INTEDG0 = 0; /* Select HIGH to LOW edge for interrupt */
-    INTCONbits.INT0IF = 0;  /* Clear the INT0 reauest flag */
-    INTCONbits.INT0IE = 1;  /* Emable an INT0 assert to wake from sleep */
     OSCCONbits.IDLEN = 0;
     WDTCONbits.SWDTEN = 1;  /* Enable the regular Watch Dog Time out too */
     WDTCONbits.REGSLP = 1;
+    INTCON2bits.INTEDG0 = 0; /* Select HIGH to LOW edge for interrupt */
+    INTCONbits.INT0IF = 0;  /* Clear the INT0 reauest flag */
+    INTCONbits.INT0IE = 1;  /* Enable an INT0 assert to wake from sleep */
     DSCONHbits.DSEN = 1;
     Nop();
     Sleep();
